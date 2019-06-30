@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 
+import javax.print.attribute.standard.Severity;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -62,6 +63,9 @@ public class ControllerServlet extends HttpServlet {
 				case "/delete":
 					deleteBook(request,response);
 					break;
+				case "/edit":
+					showEditForm(request,response);
+					break;
         default:
 				   listBooks(request, response);
            break;
@@ -114,6 +118,16 @@ public class ControllerServlet extends HttpServlet {
 		int id= Integer.parseInt(request.getParameter("id"));
 		bookDAO.deleteBook(id);
 		response.sendRedirect("list");
+	}
+
+	private void showEditForm(HttpServletRequest request, HttpServletResponse response)
+		throws ServletException, IOException {
+
+		int id= Integer.parseInt(request.getParameter("id"));
+		Book book= bookDAO.getBook(id);
+		RequestDispatcher rd = request.getRequestDispatcher("/BookForm.jsp");
+		request.setAttribute("book", book);
+		rd.forward(request,response);
 	}
 
 	/**
